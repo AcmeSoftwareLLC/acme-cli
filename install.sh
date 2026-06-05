@@ -26,6 +26,8 @@ command -v go >/dev/null 2>&1 || die "Go is not installed. Install it from https
 GOPATH_BIN="$(go env GOPATH)/bin"
 BINARY="$GOPATH_BIN/acme-cli"
 
+rm -f "$BINARY"
+
 printf 'Installing acme-cli@%s...\n' "$VERSION"
 
 if ! go install "${REPO}@${VERSION}" 2>&1; then
