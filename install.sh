@@ -26,12 +26,6 @@ command -v go >/dev/null 2>&1 || die "Go is not installed. Install it from https
 GOPATH_BIN="$(go env GOPATH)/bin"
 BINARY="$GOPATH_BIN/acme-cli"
 
-if [ -f "$BINARY" ] && [ "$VERSION" = "latest" ]; then
-    printf 'acme-cli is already installed. To upgrade, set ACME_VERSION=latest and re-run with FORCE=1.\n'
-    warn_path
-    exit 0
-fi
-
 printf 'Installing acme-cli@%s...\n' "$VERSION"
 
 if ! go install "${REPO}@${VERSION}" 2>&1; then
