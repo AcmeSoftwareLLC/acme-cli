@@ -30,7 +30,7 @@ func (p *Provider) Login() error {
 		fmt.Println("Already authenticated.")
 		return nil
 	}
-	fmt.Println("Opening browser login...")
+	fmt.Println("Opening browser login ...")
 	cmd := exec.Command("infisical", "login", "--domain="+p.cfg.Secrets.Infisical.Domain)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -228,5 +228,3 @@ func envOrDefault(key, fallback string) string {
 	}
 	return fallback
 }
-
-
