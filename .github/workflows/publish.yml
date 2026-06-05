@@ -29,12 +29,12 @@ jobs:
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/}"
-            ko build ./cmd/acme \
+            ko build . \
               --bare \
               --platform linux/amd64,linux/arm64 \
               --tags "${VERSION},latest"
           else
-            ko build ./cmd/acme \
+            ko build . \
               --bare \
               --platform linux/amd64,linux/arm64 \
               --tags latest
