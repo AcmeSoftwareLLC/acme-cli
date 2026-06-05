@@ -177,7 +177,7 @@ func (p *Provider) isAuthenticated() bool {
 	if err := json.Unmarshal(out, &s); err != nil {
 		return false
 	}
-	return s.Status == "authenticated" && s.Exp > time.Now().Unix()
+	return s.Status == "authenticated" && (s.Exp == 0 || s.Exp > time.Now().Unix())
 }
 
 func (p *Provider) installLinux() error {
