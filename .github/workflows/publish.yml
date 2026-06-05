@@ -1,0 +1,44 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - uses: ko-build/setup-ko@v0.9
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+            ko build ./cmd/acme \
+              --bare \
+              --platform linux/amd64,linux/arm64 \
+              --tags "${VERSION},latest"
+          else
+            ko build ./cmd/acme \
+              --bare \
+              --platform linux/amd64,linux/arm64 \
+              --tags latest
+          fi
+        env:
+          KO_DOCKER_REPO: ghcr.io/acmesoftwarellc/acme-cli
+          GOFLAGS: "-ldflags=-s -w"

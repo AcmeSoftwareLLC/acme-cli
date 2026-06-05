@@ -1,0 +1,31 @@
+[secrets]
+provider    = "infisical"
+env_file    = ".env"
+environment = "local"
+
+[secrets.infisical]
+project_id = "infisical-project-id"
+domain     = "https://app.infisical.com"
+
+# A service that needs secrets injected (default behaviour)
+[services.api]
+command = "go run ./cmd/api"
+
+# A service with multiple steps — earlier commands run as subprocesses,
+# the last one replaces the current process (exec)
+[services.worker]
+commands = [
+  "go generate ./...",
+  "go run ./cmd/worker",
+]
+
+# A service with extra environment variables
+[services.migrate]
+command = "go run ./cmd/migrate"
+[services.migrate.env]
+DB_POOL_SIZE = "1"
+
+# A service that does not need secrets (skips provider injection entirely)
+[services.frontend]
+command = "npm run dev"
+secrets = false
