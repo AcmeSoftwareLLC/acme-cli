@@ -164,8 +164,12 @@ func (p *Provider) mergeEnv(extra map[string]string) []string {
 }
 
 type loginStatus struct {
-	Status string `json:"status"`
-	Exp    int64  `json:"exp"`
+	Sessions []struct {
+		Status string `json:"status"`
+		Token  struct {
+			Exp int64 `json:"exp"`
+		} `json:"token"`
+	} `json:"sessions"`
 }
 
 func (p *Provider) isAuthenticated() bool {
@@ -177,7 +181,12 @@ func (p *Provider) isAuthenticated() bool {
 	if err := json.Unmarshal(out, &s); err != nil {
 		return false
 	}
-	return s.Status == "authenticated" && (s.Exp == 0 || s.Exp > time.Now().Unix())
+	for _, session := range s.Sessions {
+		if session.Status == "authenticated" && (session.Token.Exp == 0 || session.Token.Exp > time.Now().Unix()) {
+			return true
+		}
+	}
+	return false
 }
 
 func (p *Provider) installLinux() error {
