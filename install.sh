@@ -2,7 +2,7 @@
 set -e
 
 VERSION="${ACME_VERSION:-latest}"
-REPO="github.com/AcmeSoftwareLLC/acme-cli"
+REPO="github.com/acmesoftwarellc/acme-cli"
 
 die() {
     printf 'Error: %s\n' "$1" >&2
