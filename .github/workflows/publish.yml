@@ -41,4 +41,3 @@ jobs:
           fi
         env:
           KO_DOCKER_REPO: ghcr.io/acmesoftwarellc/acme-cli
-          GOFLAGS: "-ldflags=-s -w"

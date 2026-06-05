@@ -1,0 +1,6 @@
+builds:
+  - id: acme-cli
+    main: .
+    ldflags:
+      - -s
+      - -w
